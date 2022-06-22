@@ -39,10 +39,14 @@ function precioFinal() {
     }
     if(precioTotal >= 1000) {
         envioGratis = true;
-        alert(`el precio final es de $ ${precioTotal} y el envio es gratis`);
+        document.getElementById('precioTotal').innerHTML = 
+        `el precio final es de $ ${precioTotal} y el envio es gratis`;
+        /* alert(`el precio final es de $ ${precioTotal} y el envio es gratis`); */
     }
     else {
-        alert(`el precio final es de $ ${precioTotal}`);
+        document.getElementById('precioTotal').innerHTML = 
+        `el precio final es de $ ${precioTotal}`;
+        /* alert(`el precio final es de $ ${precioTotal}`); */
     }
 
     
