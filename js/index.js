@@ -9,6 +9,9 @@ let precioArticulos = [];
 let precioTotal = 0;
 let envioGratis = false;
 
+/* se le pide al usuario la cantidad de productos que va a comprar,
+con la cantidad ingresada. se pide el precio de cada uno para sumar a un array */
+
 function agregarArticulo() {
     for (let i = 0; i < cantidadArticulos; i++) {
         precioArticulos.push(parseInt(prompt('precio del articulo'))); 
@@ -17,6 +20,11 @@ function agregarArticulo() {
 }
 
 agregarArticulo();
+
+/* si la cantidad de elementos del array es de 3 o más se ordenan por precio,
+para setear el mas barato como producto gratis (por la promo 3x2) (ver en la consola el orden),
+se ve si la cantidad de productos que lleva el cliente es multiplo de 3, y con el multiplo este se 
+setea la cantidad de productos gratis, siempre siendo estos los más baratos */
 
 function promocion(){
     if (precioArticulos.length > 2) {
@@ -33,6 +41,10 @@ function promocion(){
 
 promocion();
 
+/* con la siguiente funcion, se suma el precio de los productos del array, dandonos el precio total
+de los productos que va a comprar el cliente, y si el precio es mayor a $1000, 
+el envio se hace gratis. Se agrega el total al index.html */
+
 function precioFinal() {
     for (let i= 0; i < precioArticulos.length; i++) {
         precioTotal = precioTotal + precioArticulos[i];
@@ -41,12 +53,12 @@ function precioFinal() {
         envioGratis = true;
         document.getElementById('precioTotal').innerHTML = 
         `el precio final es de $ ${precioTotal} y el envio es gratis`;
-        /* alert(`el precio final es de $ ${precioTotal} y el envio es gratis`); */
+        
     }
     else {
         document.getElementById('precioTotal').innerHTML = 
         `el precio final es de $ ${precioTotal}`;
-        /* alert(`el precio final es de $ ${precioTotal}`); */
+        
     }
 
     
