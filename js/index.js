@@ -65,3 +65,27 @@ function precioFinal() {
 }
 
 precioFinal();
+
+/* con el siguiente constructor, la idea es importar las plantas, para mostrarlas en el index 
+en forma de cards. El index va a tener una sección de plantas recomendadas, donde se clickea una planta
+y se abre un modal con info detallada de la misma. El usuario indica la cantidad que quiere 
+agregar al carrito de compras, donde finalmente se suman los totales y se hace la compra*/
+
+function planta(nombre, tipo, altura, macetaIncluida, precio, src) {
+
+    this.nombre = nombre;
+    this.tipo = tipo;
+    this.altura = altura;
+    this.macetaIncluida = macetaIncluida;
+    this.precio = precio;
+    this.src = src;
+}
+
+const dracena = new planta('Dracena', 'Arbusto', '55', true,  1100, './img/productos/dracena.jpg');
+const pilea = new planta('Pilea peperomioides', 'Herbácea', '12', true, 400, './img/productos/pilea.jpg');
+const crisantemo = new planta('Crisantemo', 'Herbácea', '30', true, 320,'./img/productos/crisantemo.jpg');
+
+
+console.log(dracena);
+console.log(pilea);
+console.log(crisantemo);
