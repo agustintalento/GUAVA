@@ -13,3 +13,8 @@
 .navbar-brand{
     font-size: 2.25rem;
 }
+
+.plantaNombre{
+    font-family: 'Gulzar', serif;
+    font-size: large;
+}
