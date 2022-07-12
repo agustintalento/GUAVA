@@ -65,7 +65,10 @@ function promocion(){
     return precioArticulos;
 }
 
-function calculoTotal() {
+function calculoTotal(e) {
+    
+    e.preventDefault();
+
     let precioArticulos = promocion();
     let precioFinal = 0;
     precioArticulos.forEach(precio => { precioFinal += precio;
