@@ -40,11 +40,7 @@ arrayPlantas.forEach(planta => {document.getElementById('plantas').innerHTML += 
     
 });
 
-
-
-/* calculo el precio final de la compra y la muestro en el html */
-function promocion(){
-
+function arrayPrecios() {
     let precioArticulos =[];
     arrayPlantas.forEach(planta => { 
         for (let i = 0; i < parseInt(document.getElementById(planta.nombre).value); i++) {
@@ -52,6 +48,14 @@ function promocion(){
             
         }
     });
+    return precioArticulos;
+}
+
+/* calculo el precio final de la compra y la muestro en el html */
+function promocion(){
+
+    let precioArticulos = arrayPrecios();
+    
 
     if (precioArticulos.length > 2) {
         precioArticulos.sort(function(a, b) {
@@ -65,15 +69,21 @@ function promocion(){
     return precioArticulos;
 }
 
-function calculoTotal(e) {
-    
-    e.preventDefault();
-
+function calculoTotal() {
     let precioArticulos = promocion();
     let precioFinal = 0;
     precioArticulos.forEach(precio => { precioFinal += precio;
         
     });
+    return precioFinal;
+
+}
+
+function displayPrecioFinal(e) {
+    
+    e.preventDefault();
+
+    let precioFinal = calculoTotal();
 
     
     if(precioFinal >= 1000) {
@@ -92,9 +102,25 @@ function calculoTotal(e) {
 }
 
 
+function actualizarPrecio() {
+    
+    let subtotal = 0;
+    let listaPrecios = arrayPrecios();
+    listaPrecios.forEach(precio => { subtotal += precio;
+        
+    });
+
+    document.getElementById("subtotal").innerHTML = `El subtotal es ${subtotal}`;
+}
 
 
+document.addEventListener("DOMContentLoaded", function(e){
 
+    arrayPlantas.forEach(planta => {
+        document.getElementById(planta.nombre).addEventListener("input", actualizarPrecio);
+    }) 
 
+    document.getElementById("botonCarrito").addEventListener("click", displayPrecioFinal);
 
-document.getElementById("botonCarrito").addEventListener("click", calculoTotal);
+    actualizarPrecio();
+})
