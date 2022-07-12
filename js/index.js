@@ -40,6 +40,8 @@ arrayPlantas.forEach(planta => {document.getElementById('plantas').innerHTML += 
     
 });
 
+/* creo array de precios de las plantas elegidas por el usuario */
+
 function arrayPrecios() {
     let precioArticulos =[];
     arrayPlantas.forEach(planta => { 
@@ -51,7 +53,7 @@ function arrayPrecios() {
     return precioArticulos;
 }
 
-/* calculo el precio final de la compra y la muestro en el html */
+/* calcula la promocion 3x2, siendo gratis el de menor precio*/
 function promocion(){
 
     let precioArticulos = arrayPrecios();
@@ -69,6 +71,8 @@ function promocion(){
     return precioArticulos;
 }
 
+/* calculo precio final de la compra, con la promocion incluida */
+
 function calculoTotal() {
     let precioArticulos = promocion();
     let precioFinal = 0;
@@ -78,6 +82,8 @@ function calculoTotal() {
     return precioFinal;
 
 }
+
+/* despliego el precio final en el html y calcula si el envio es gratis o no */
 
 function displayPrecioFinal(e) {
     
@@ -101,6 +107,7 @@ function displayPrecioFinal(e) {
  
 }
 
+/* funcion que actualiza el subtotal, variando el monto modificado en los inputs */
 
 function actualizarPrecio() {
     
@@ -113,6 +120,8 @@ function actualizarPrecio() {
     document.getElementById("subtotal").innerHTML = `El subtotal es ${subtotal}`;
 }
 
+/* eventos que se llaman en los inputs del html utilizando las funciones 
+creadas previamente, se utiliza el domContentLoaded para asegurar que la pagina haya cargado */
 
 document.addEventListener("DOMContentLoaded", function(e){
 
