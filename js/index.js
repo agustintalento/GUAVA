@@ -3,25 +3,27 @@
 //además setear envio gratis cuando el precio es mayor a $1000
 
 let envioGratis = false;
+let costoEnvio = 50;
 
 /* con el siguiente constructor, la idea es importar las plantas, para mostrarlas en el index 
 en forma de cards. El index va a tener una sección de plantas recomendadas, donde se clickea una planta
 y se abre un modal con info detallada de la misma. El usuario indica la cantidad que quiere 
 agregar al carrito de compras, donde finalmente se suman los totales y se hace la compra*/
 
-function planta(nombre, tipo, altura, macetaIncluida, precio, src) {
+function planta(nombre, tipo, altura, macetaIncluida, precio, stock, src) {
 
     this.nombre = nombre;
     this.tipo = tipo;
     this.altura = altura;
     this.macetaIncluida = macetaIncluida;
     this.precio = precio;
+    this.stock = stock;
     this.src = src;
 }
 
-const dracena = new planta('Dracena', 'Arbusto', '55', true,  1100, './img/productos/dracena.jpg');
-const pilea = new planta('Pilea peperomioides', 'Herbácea', '12', true, 400, './img/productos/pilea.jpg');
-const crisantemo = new planta('Crisantemo', 'Herbácea', '30', true, 320,'./img/productos/crisantemo.jpg');
+const dracena = new planta('Dracena', 'Arbusto', '55', true,  1100, 12, './img/productos/dracena.jpg');
+const pilea = new planta('Pilea peperomioides', 'Herbácea', '12', true, 400, 10, './img/productos/pilea.jpg');
+const crisantemo = new planta('Crisantemo', 'Herbácea', '30', true, 320, 15, './img/productos/crisantemo.jpg');
 
 let arrayPlantas = [dracena, pilea, crisantemo];
 
@@ -32,8 +34,9 @@ arrayPlantas.forEach(planta => {document.getElementById('plantas').innerHTML += 
     <div class="card-body">
         <p class="card-text plantaNombre">${planta.nombre}</p>
         <p class="card-text plantaNombre">$ ${planta.precio}</p>
-
-        <input id="${planta.nombre}" type="number" value="0" min="0" max="10" />
+        <label for="${planta.nombre}">Cantidad: </label>
+        <input id="${planta.nombre}" type="number" value="0" min="0" max="${planta.stock}" />
+        <p id="disponibilidad${planta.nombre}"></p>
     </div>
     </div>
 `
@@ -79,32 +82,66 @@ function calculoTotal() {
     precioArticulos.forEach(precio => { precioFinal += precio;
         
     });
+
     return precioFinal;
 
 }
 
-/* despliego el precio final en el html y calcula si el envio es gratis o no */
+/* función que calcula el stock disponible de cada articulo, 
+si no hay stock se deshabilita el input y se escribe el mensaje correspondiente
+ademas se setea el stock en el localStorage */
+
+function stockDisponible(){
+    let stock ={};
+    arrayPlantas.forEach(planta => { 
+        if(document.getElementById(planta.nombre).value < planta.stock) {
+                
+            planta.stock -= parseInt(document.getElementById(planta.nombre).value);
+        }else{
+            planta.stock = 0;
+            document.getElementById(planta.nombre).disabled = true;
+            document.getElementById(planta.nombre).hidden = true;
+            document.getElementById('disponibilidad'+planta.nombre).innerHTML = `
+                No hay stock disponible
+            
+            `
+        }
+        stock[planta.nombre] = planta.stock;
+        document.getElementById(planta.nombre).max = planta.stock;
+        document.getElementById(planta.nombre).value = 0;
+    });
+    localStorage.setItem('Stock', JSON.stringify(stock));
+
+}
+
+/* despliego el precio final en el html y calcula si el envio es gratis o no,
+guardo la ganancia por compra, y ganancia total en el local storage */
 
 function displayPrecioFinal(e) {
     
     e.preventDefault();
 
     let precioFinal = calculoTotal();
+    let gananciaTotal = parseInt(localStorage.getItem('Ganancia Total'));
 
-    
     if(precioFinal >= 1000) {
         envioGratis = true;
         document.getElementById('precioTotal').innerHTML = 
         `el precio final es de $ ${precioFinal} y el envio es gratis`;
+        localStorage.setItem('Ganancia', precioFinal - costoEnvio) ;
+        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal - costoEnvio);
         
     }
     else {
         document.getElementById('precioTotal').innerHTML = 
         `el precio final es de $ ${precioFinal}`;
-        
+        localStorage.setItem('Ganancia', precioFinal) ;
+        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal);
+
+
     }
 
- 
+    stockDisponible();
 }
 
 /* funcion que actualiza el subtotal, variando el monto modificado en los inputs */
@@ -121,7 +158,9 @@ function actualizarPrecio() {
 }
 
 /* eventos que se llaman en los inputs del html utilizando las funciones 
-creadas previamente, se utiliza el domContentLoaded para asegurar que la pagina haya cargado */
+creadas previamente, se utiliza el domContentLoaded para asegurar que la pagina haya cargado 
+actualizo el stock en el localStorage, y la ganancia total cuando se vuelve a cargar la pagina
+*/
 
 document.addEventListener("DOMContentLoaded", function(e){
 
@@ -131,5 +170,9 @@ document.addEventListener("DOMContentLoaded", function(e){
 
     document.getElementById("botonCarrito").addEventListener("click", displayPrecioFinal);
 
+    localStorage.clear();
+    localStorage.setItem('Ganancia Total', 0);
     actualizarPrecio();
+    stockDisponible();
+
 })
