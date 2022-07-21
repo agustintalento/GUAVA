@@ -21,6 +21,7 @@ function planta(nombre, tipo, altura, macetaIncluida, precio, stock, src) {
     this.src = src;
 }
 
+
 const dracena = new planta('Dracena', 'Arbusto', '55', true,  1100, 12, './img/productos/dracena.jpg');
 const pilea = new planta('Pilea peperomioides', 'Herbácea', '12', true, 400, 10, './img/productos/pilea.jpg');
 const crisantemo = new planta('Crisantemo', 'Herbácea', '30', true, 320, 15, './img/productos/crisantemo.jpg');
@@ -60,7 +61,6 @@ function arrayPrecios() {
 function promocion(){
 
     let precioArticulos = arrayPrecios();
-    
 
     if (precioArticulos.length > 2) {
         precioArticulos.sort(function(a, b) {
@@ -74,15 +74,22 @@ function promocion(){
     return precioArticulos;
 }
 
+/*creo funcion suma aplicando spread*/
+
+function suma(...numeros) {
+    let total = 0;
+    numeros.forEach( numero => {
+        total += numero;
+    });
+    return total;
+}
+
 /* calculo precio final de la compra, con la promocion incluida */
 
 function calculoTotal() {
     let precioArticulos = promocion();
-    let precioFinal = 0;
-    precioArticulos.forEach(precio => { precioFinal += precio;
-        
-    });
-
+    let precioFinal = suma(...precioArticulos);
+    
     return precioFinal;
 
 }
@@ -92,25 +99,27 @@ si no hay stock se deshabilita el input y se escribe el mensaje correspondiente
 ademas se setea el stock en el localStorage */
 
 function stockDisponible(){
-    let stock ={};
+    let stockActual ={};
     arrayPlantas.forEach(planta => { 
-        if(document.getElementById(planta.nombre).value < planta.stock) {
+        let {nombre, stock} = planta;
+
+        document.getElementById(nombre).value < stock ? (
                 
-            planta.stock -= parseInt(document.getElementById(planta.nombre).value);
-        }else{
-            planta.stock = 0;
-            document.getElementById(planta.nombre).disabled = true;
-            document.getElementById(planta.nombre).hidden = true;
-            document.getElementById('disponibilidad'+planta.nombre).innerHTML = `
+            planta.stock -= parseInt(document.getElementById(nombre).value)
+        ) 
+        : ( planta.stock = 0,
+            document.getElementById(nombre).disabled = true,
+            document.getElementById(nombre).hidden = true,
+            document.getElementById('disponibilidad'+nombre).innerHTML = `
                 No hay stock disponible
             
             `
-        }
-        stock[planta.nombre] = planta.stock;
-        document.getElementById(planta.nombre).max = planta.stock;
-        document.getElementById(planta.nombre).value = 0;
+        )
+        stockActual[nombre] = planta.stock;
+        document.getElementById(nombre).max = planta.stock;
+        document.getElementById(nombre).value = 0;
     });
-    localStorage.setItem('Stock', JSON.stringify(stock));
+    localStorage.setItem('Stock', JSON.stringify(stockActual));
 
 }
 
@@ -124,35 +133,33 @@ function displayPrecioFinal(e) {
     let precioFinal = calculoTotal();
     let gananciaTotal = parseInt(localStorage.getItem('Ganancia Total'));
 
-    if(precioFinal >= 1000) {
-        envioGratis = true;
+    precioFinal >= 1000 ? (
+        envioGratis = true,
         document.getElementById('precioTotal').innerHTML = 
-        `el precio final es de $ ${precioFinal} y el envio es gratis`;
-        localStorage.setItem('Ganancia', precioFinal - costoEnvio) ;
-        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal - costoEnvio);
+        `el precio final es de $ ${precioFinal} y el envio es gratis`,
+        localStorage.setItem('Ganancia', precioFinal - costoEnvio) ,
+        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal - costoEnvio)
         
-    }
-    else {
+        ) : (
         document.getElementById('precioTotal').innerHTML = 
-        `el precio final es de $ ${precioFinal}`;
-        localStorage.setItem('Ganancia', precioFinal) ;
-        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal);
+        `el precio final es de $ ${precioFinal}`,
+        localStorage.setItem('Ganancia', precioFinal),
+        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal)
 
 
-    }
+    )
 
     stockDisponible();
 }
+
 
 /* funcion que actualiza el subtotal, variando el monto modificado en los inputs */
 
 function actualizarPrecio() {
     
-    let subtotal = 0;
     let listaPrecios = arrayPrecios();
-    listaPrecios.forEach(precio => { subtotal += precio;
-        
-    });
+    let subtotal = suma(...listaPrecios);
+    
 
     document.getElementById("subtotal").innerHTML = `El subtotal es ${subtotal}`;
 }
