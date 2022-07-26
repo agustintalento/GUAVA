@@ -169,6 +169,10 @@ creadas previamente, se utiliza el domContentLoaded para asegurar que la pagina 
 actualizo el stock en el localStorage, y la ganancia total cuando se vuelve a cargar la pagina
 */
 
+/*agregué la librería sweet alert, para que cuando se agreguen productos al carrito se nos notifique.
+me pareció una buena herramienta para distinguir cuando se agrega el producto al carro,
+cosa que no ocurría antes de utilizar esta alerta. */
+
 document.addEventListener("DOMContentLoaded", function(e){
 
     arrayPlantas.forEach(planta => {
@@ -176,10 +180,18 @@ document.addEventListener("DOMContentLoaded", function(e){
     }) 
 
     document.getElementById("botonCarrito").addEventListener("click", displayPrecioFinal);
-
+    document.getElementById("botonCarrito").addEventListener("click", () => {
+        Swal.fire(
+            'Se agregó tu producto al carrito',
+            'Continúa viendo más productos',
+            'success'
+        )}
+    );
+   
     localStorage.clear();
     localStorage.setItem('Ganancia Total', 0);
     actualizarPrecio();
     stockDisponible();
 
 })
+
