@@ -1,0 +1,37 @@
+[
+    {   "nombre": "Drácena Tricolor",
+        "tipo" : "Palmera",
+        "altura" : 50,
+        "macetaInculida" : true,
+        "precio" : 370,
+        "stock" : 6,
+        "src" : "../img/productos/dracenaTricolor.jpg"
+    },
+
+    {   "nombre": "Lirio De La Paz",
+        "tipo" : "Herbácea",
+        "altura" : 50,
+        "macetaInculida" : true,
+        "precio" : 400,
+        "stock" : 7,
+        "src" : "../img/productos/lirioDeLaPaz.jpg"
+    },
+
+    {   "nombre": "Peperomia Cola De Raton",
+        "tipo" : "Suculenta",
+        "altura" : 20,
+        "macetaInculida" : true,
+        "precio" : 250,
+        "stock" : 3,
+        "src" : "../img/productos/peperomiaColaDeRaton.jpg"
+    },
+
+    {   "nombre": "Philodendron Brasil",
+        "tipo" : "Trepador",
+        "altura" : 20,
+        "macetaInculida" : true,
+        "precio" : 760,
+        "stock" : 4,
+        "src" : "../img/productos/philodendronBrasil.jpg"
+    }
+]
