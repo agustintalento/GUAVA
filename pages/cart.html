@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="shortcut icon" href="./img/guava-favicon.png">
+    <link rel="shortcut icon" href="../img/guava-favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400&family=Amatic+SC&family=Dela+Gothic+One&family=Gulzar&family=IBM+Plex+Mono:wght@200&family=Kanit:wght@800&family=Nanum+Myeongjo&family=Oswald:wght@200&family=PT+Serif:ital@1&family=Playfair+Display&display=swap" rel="stylesheet">
@@ -21,11 +21,11 @@
             <a class="navbar-brand" href="#">SERVICIOS</a>
         </div>
         <div class="d-flex justify-content-center">
-            <a class="navbar-brand" href="./pages/catalogo.html">CATALOGO</a>
+            <a class="navbar-brand" href="catalogo.html">CATALOGO</a>
         </div>
         <div class="logo d-flex justify-content-center">
-          <a class="navbar-brand" href="index.html">
-            <img src="./img/guava 2 110alto.png" alt="guava-logo" width="200" height="100">
+          <a class="navbar-brand" href="../index.html">
+            <img src="../img/guava 2 110alto.png" alt="guava-logo" width="200" height="100">
           </a>
         </div>
         <div class="d-flex justify-content-center">
@@ -35,47 +35,22 @@
            <a href="https://www.facebook.com/guavaplantshop/" target="_blank" class="sm-icon"> <i class="fa-brands fa-facebook"></i></a>
            <a href="https://www.instagram.com/guavaplantshop/" target="_blank" class="sm-icon"> <i class="fa-brands fa-instagram"></i></a>
            <a href="https://wa.me/######?text=GuavaPlantShop" target="_blank" class="sm-icon"><i class="fa-brands fa-whatsapp"></i></a>
-           <a href="#" target="_blank" class="sm-icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito" aria-controls="offcanvasExample"><i class="cart fa-solid fa-cart-shopping"></i></a>
         </div>
         
     </nav>
        
     <main>
-        <div>
-            <h1 class="d-flex justify-content-center">DESTACADOS DEL MES</h1>
-        </div>
-        <div id="plantas" class="d-flex justify-content-around row"></div>
-        <div class="d-flex justify-content-center">
-            <button id="botonCarrito" class="btn btn-primary" type="submit" form="plantas">Agregar al carrito</button>
-        </div>
-
+    
         <h2 id="subtotal"></h2>
         <h1 id="precioTotal"></h1>
 
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasCarritoLabel">CARRITO DE COMPRAS</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div id="itemCarrito"></div>
-                <div>
-                    <a href="./pages/cart.html">
-                        <button class="btn btn-secondary" type="button" id="botonComprar">
-                            COMPRAR
-                        </button>
-                    </a>
-                </div>    
-            </div>
-        </div>
-        
     </main>
     <footer></footer>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="./js/bootstrap.bundle.min.js"></script>
-    <script src="./js/init.js"></script>
-    <script src="./js/index.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/init.js"></script>
+    <script src="../js/catalogo.js"></script>
 
 </body>
 </html>

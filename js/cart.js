@@ -1,56 +1,75 @@
-//El sitio es un ecommerce de una tienda de plantas
+let envioGratis = false;
+let costoEnvio = 50;
+let arrayCatalogo = [];
 
+/* creo funcion asincronica, donde se hace una petición de los datos en un archivo JSON, y a este
+array lo mostramos en la pagina catalogo, si la petición falla, se logea error en la consola */
 
-/* con el siguiente constructor, la idea es importar las plantas, para mostrarlas en el index 
-en forma de cards. El index va a tener una sección de plantas recomendadas, donde se clickea una planta
-y se abre un modal con info detallada de la misma. El usuario indica la cantidad que quiere 
-agregar al carrito de compras, donde finalmente se suman los totales y se hace la compra*/
+const getJSONdata = async() => {
 
-function planta(id, nombre, tipo, altura, macetaIncluida, precio, stock, src) {
+    try {
+        const resp = await fetch('../catalogo.JSON');
+        const data = await resp.json();
 
-    this.id = id;
-    this.nombre = nombre;
-    this.tipo = tipo;
-    this.altura = altura;
-    this.macetaIncluida = macetaIncluida;
-    this.precio = precio;
-    this.stock = stock;
-    this.src = src;
+        data.forEach(planta => {document.getElementById('plantas').innerHTML +=  `
+
+            <div class="card align-items-center" style="width: 18rem; border: none">
+                <img src="${planta.src}" class="card-img-top" alt="dracena">
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="card-text plantaNombre" style="padding-right: 20px;">${planta.nombre}</p>
+                    <p class="card-text plantaNombre">$ ${planta.precio}</p>
+                </div>    
+                <label for="${planta.nombre}">Cantidad: </label>
+                <input id="${planta.nombre}" type="number" value="0" min="0" max="${planta.stock}" />
+                <p id="disponibilidad${planta.nombre}"></p>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-secondary agregarItem" type="submit" form="plantas" onclick="agregarItem(${planta.id})">Agregar al carrito</button>
+                </div>
+            </div>
+            </div>
+        `
+        
+        });
+
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
+/* se crea evento al cargar el dom donde se hace la petición de los datos, y se agregan los 
+event listeners de cada input y una alerta al agregar producto al carrito de compras */
 
-const dracena = new planta(10,'Dracena', 'Arbusto', '55', true,  1100, 12, './img/productos/dracena.jpg');
-const pilea = new planta(11, 'Pilea Peperomioides', 'Herbácea', '12', true, 400, 10, './img/productos/pilea.jpg');
-const crisantemo = new planta(12, 'Crisantemo', 'Herbácea', '30', true, 320, 15, './img/productos/crisantemo.jpg');
+document.addEventListener("DOMContentLoaded", async function(e){
+    arrayCatalogo = await getJSONdata();
 
-let arrayPlantas = [dracena, pilea, crisantemo];
+    arrayCatalogo.forEach(planta => {
+        document.getElementById(planta.nombre).addEventListener("input", actualizarPrecio);
+    }) 
 
-arrayPlantas.forEach(planta => {document.getElementById('plantas').innerHTML +=  `
+    document.getElementById("botonCarrito").addEventListener("click", displayPrecioFinal);
+    document.getElementById("botonCarrito").addEventListener("click", () => {
+        Swal.fire(
+            'Se agregó tu producto al carrito',
+            'Continúa viendo más productos',
+            'success'
+        )}
+    );
+   
+    localStorage.clear();
+    localStorage.setItem('Ganancia Total', 0);
+    actualizarPrecio();
+    stockDisponible();
 
-    <div class="card align-items-center" style="width: 18rem; border:none">
-        <img src="${planta.src}" class="card-img-top" alt="dracena">
-    <div class="card-body">
-        <div class="d-flex">
-            <p class="card-text plantaNombre" style="padding-right: 20px;">${planta.nombre}</p>
-            <p class="card-text plantaNombre">$ ${planta.precio}</p>
-        </div> 
-        <label for="${planta.nombre}">Cantidad: </label> 
-        <input id="${planta.nombre}" type="number" value="0" min="0" max="${planta.stock}" />
-        <p id="disponibilidad${planta.nombre}"></p>
-        <div class="d-flex justify-content-center">
-            <button class="btn btn-secondary agregarItem" type="submit" form="plantas" onclick="agregarItem(${planta.id})">Agregar al carrito</button>
-        </div>
-    </div>
-    </div>
-`
-    
-});
+})
 
 /* creo array de precios de las plantas elegidas por el usuario */
 
 function arrayPrecios() {
     let precioArticulos =[];
-    arrayPlantas.forEach(planta => { 
+    arrayCatalogo.forEach(planta => { 
         for (let i = 0; i < parseInt(document.getElementById(planta.nombre).value); i++) {
             precioArticulos.push(planta.precio);
             
@@ -102,7 +121,7 @@ ademas se setea el stock en el localStorage */
 
 function stockDisponible(){
     let stockActual ={};
-    arrayPlantas.forEach(planta => { 
+    arrayCatalogo.forEach(planta => { 
         let {nombre, stock} = planta;
 
         document.getElementById(nombre).value < stock ? (
@@ -165,35 +184,3 @@ function actualizarPrecio() {
 
     document.getElementById("subtotal").innerHTML = `El subtotal es ${subtotal}`;
 }
-
-/* eventos que se llaman en los inputs del html utilizando las funciones 
-creadas previamente, se utiliza el domContentLoaded para asegurar que la pagina haya cargado 
-actualizo el stock en el localStorage, y la ganancia total cuando se vuelve a cargar la pagina
-*/
-
-/*agregué la librería sweet alert, para que cuando se agreguen productos al carrito se nos notifique.
-me pareció una buena herramienta para distinguir cuando se agrega el producto al carro,
-cosa que no ocurría antes de utilizar esta alerta. */
-
-document.addEventListener("DOMContentLoaded", function(e){
-
-    arrayPlantas.forEach(planta => {
-        document.getElementById(planta.nombre).addEventListener("input", actualizarPrecio);
-    }) 
-
-    document.getElementById("botonCarrito").addEventListener("click", displayPrecioFinal);
-    document.getElementById("botonCarrito").addEventListener("click", () => {
-        Swal.fire(
-            'Se agregó tu producto al carrito',
-            'Continúa viendo más productos',
-            'success'
-        )}
-    );
-   
-    localStorage.clear();
-    localStorage.setItem('Ganancia Total', 0);
-    actualizarPrecio();
-    stockDisponible();
-
-})
-
