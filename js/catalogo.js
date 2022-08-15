@@ -21,7 +21,7 @@ const getJSONdata = async() => {
                     <p class="card-text plantaNombre">$ ${planta.precio}</p>
                 </div>    
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-secondary agregarItem" type="submit" form="plantas" onclick="agregarItem(${planta.id})">Agregar al carrito</button>
+                    <button class="btn btn-secondary agregarItem" type="submit" onclick="agregarItem(${planta.id})">Agregar al carrito</button>
                 </div>
             </div>
             </div>

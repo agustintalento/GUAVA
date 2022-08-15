@@ -21,7 +21,15 @@ function agregarItem(idPlanta) {
                     cantidad : 1            
                 };
         carrito.push(item); 
+
+        Swal.fire(
+            'Se agregó tu producto al carrito',
+            'Continúa viendo más productos',
+            'success'
+        )
+        
     }
+
 
     actualizarCarrito();
     mostrarCarrito();

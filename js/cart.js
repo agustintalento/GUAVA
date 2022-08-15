@@ -12,20 +12,14 @@ const getJSONdata = async() => {
         const data = await resp.json();
 
         data.forEach(planta => {document.getElementById('plantas').innerHTML +=  `
-
-            <div class="card align-items-center" style="width: 18rem; border: none">
+            <div class="card align-items-center" style="width: 18rem;">
                 <img src="${planta.src}" class="card-img-top" alt="dracena">
             <div class="card-body">
-                <div class="d-flex">
-                    <p class="card-text plantaNombre" style="padding-right: 20px;">${planta.nombre}</p>
-                    <p class="card-text plantaNombre">$ ${planta.precio}</p>
-                </div>    
+                <p class="card-text plantaNombre">${planta.nombre}</p>
+                <p class="card-text plantaNombre">$ ${planta.precio}</p>
                 <label for="${planta.nombre}">Cantidad: </label>
                 <input id="${planta.nombre}" type="number" value="0" min="0" max="${planta.stock}" />
                 <p id="disponibilidad${planta.nombre}"></p>
-                <div class="d-flex justify-content-center">
-                    <button class="btn btn-secondary agregarItem" type="submit" form="plantas" onclick="agregarItem(${planta.id})">Agregar al carrito</button>
-                </div>
             </div>
             </div>
         `
