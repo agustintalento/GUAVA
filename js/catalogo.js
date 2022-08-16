@@ -1,6 +1,7 @@
 let envioGratis = false;
 let costoEnvio = 50;
 let arrayCatalogo = [];
+let carritoPath = './cart.html';
 
 /* creo funcion asincronica, donde se hace una petición de los datos en un archivo JSON, y a este
 array lo mostramos en la pagina catalogo, si la petición falla, se logea error en la consola */

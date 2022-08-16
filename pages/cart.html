@@ -40,9 +40,25 @@
     </nav>
        
     <main>
-    
-        <h2 id="subtotal"></h2>
-        <h1 id="precioTotal"></h1>
+
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 200px;">Quitar Item</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Precio</th>
+                    </tr>
+                </thead>
+                <tbody id="carritoTable">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <button id="botonCarrito" type="submit" class="btn btn-secondary">Comprar</button>
+        </div>
 
     </main>
     <footer></footer>
@@ -50,7 +66,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script src="../js/init.js"></script>
-    <script src="../js/catalogo.js"></script>
+    <script src="../js/cart.js"></script>
 
 </body>
 </html>

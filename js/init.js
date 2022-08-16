@@ -22,11 +22,14 @@ function agregarItem(idPlanta) {
                 };
         carrito.push(item); 
 
-        Swal.fire(
-            'Se agregó tu producto al carrito',
-            'Continúa viendo más productos',
-            'success'
-        )
+        Swal.fire({
+          icon: 'success',
+          title: 'Se agregó tu producto al carrito',
+          text: 'Continúa viendo más productos',
+          footer: `<a href="${carritoPath}" ><i class="fa-solid fa-cart-shopping"></i> IR AL CARRITO</a>`
+        })
+
+
         
     }
 

@@ -10,22 +10,6 @@ const getJSONdata = async() => {
     try {
         const resp = await fetch('../catalogo.JSON');
         const data = await resp.json();
-
-        data.forEach(planta => {document.getElementById('plantas').innerHTML +=  `
-            <div class="card align-items-center" style="width: 18rem;">
-                <img src="${planta.src}" class="card-img-top" alt="dracena">
-            <div class="card-body">
-                <p class="card-text plantaNombre">${planta.nombre}</p>
-                <p class="card-text plantaNombre">$ ${planta.precio}</p>
-                <label for="${planta.nombre}">Cantidad: </label>
-                <input id="${planta.nombre}" type="number" value="0" min="0" max="${planta.stock}" />
-                <p id="disponibilidad${planta.nombre}"></p>
-            </div>
-            </div>
-        `
-        
-        });
-
         return data;
     } catch (error) {
         console.log(error);
@@ -33,40 +17,15 @@ const getJSONdata = async() => {
 
 }
 
-/* se crea evento al cargar el dom donde se hace la petición de los datos, y se agregan los 
-event listeners de cada input y una alerta al agregar producto al carrito de compras */
-
-document.addEventListener("DOMContentLoaded", async function(e){
-    arrayCatalogo = await getJSONdata();
-
-    arrayCatalogo.forEach(planta => {
-        document.getElementById(planta.nombre).addEventListener("input", actualizarPrecio);
-    }) 
-
-    document.getElementById("botonCarrito").addEventListener("click", displayPrecioFinal);
-    document.getElementById("botonCarrito").addEventListener("click", () => {
-        Swal.fire(
-            'Se agregó tu producto al carrito',
-            'Continúa viendo más productos',
-            'success'
-        )}
-    );
-   
-    localStorage.clear();
-    localStorage.setItem('Ganancia Total', 0);
-    actualizarPrecio();
-    stockDisponible();
-
-})
-
 /* creo array de precios de las plantas elegidas por el usuario */
 
 function arrayPrecios() {
     let precioArticulos =[];
-    arrayCatalogo.forEach(planta => { 
-        for (let i = 0; i < parseInt(document.getElementById(planta.nombre).value); i++) {
-            precioArticulos.push(planta.precio);
-            
+    carrito.forEach(item => { 
+        let plantaItem = arrayCatalogo.find(function(planta) {
+        return item.id == planta.id; } ) 
+        for (let i = 0; i < parseInt(document.getElementById(item.id).value); i++) {
+            precioArticulos.push(plantaItem.precio);    
         }
     });
     return precioArticulos;
@@ -115,24 +74,27 @@ ademas se setea el stock en el localStorage */
 
 function stockDisponible(){
     let stockActual ={};
-    arrayCatalogo.forEach(planta => { 
-        let {nombre, stock} = planta;
+    carrito.forEach(item => { 
+        let planta = arrayCatalogo.find(function(planta) {
+        return item.id == planta.id; } ); 
 
-        document.getElementById(nombre).value < stock ? (
+        let {id, nombre, stock} = planta;
+
+        document.getElementById(id).value < stock ? (
                 
-            planta.stock -= parseInt(document.getElementById(nombre).value)
+            planta.stock -= parseInt(document.getElementById(id).value)
         ) 
         : ( planta.stock = 0,
-            document.getElementById(nombre).disabled = true,
-            document.getElementById(nombre).hidden = true,
-            document.getElementById('disponibilidad'+nombre).innerHTML = `
+            document.getElementById(id).disabled = true,
+            document.getElementById(id).hidden = true,
+            document.getElementById('disponibilidad'+id).innerHTML = `
                 No hay stock disponible
             
             `
         )
         stockActual[nombre] = planta.stock;
-        document.getElementById(nombre).max = planta.stock;
-        document.getElementById(nombre).value = 0;
+        document.getElementById(id).max = planta.stock;
+        document.getElementById(id).value = 1;
     });
     localStorage.setItem('Stock', JSON.stringify(stockActual));
 
@@ -141,30 +103,38 @@ function stockDisponible(){
 /* despliego el precio final en el html y calcula si el envio es gratis o no,
 guardo la ganancia por compra, y ganancia total en el local storage */
 
-function displayPrecioFinal(e) {
-    
-    e.preventDefault();
+function displayPrecioFinal() {
 
     let precioFinal = calculoTotal();
-    let gananciaTotal = parseInt(localStorage.getItem('Ganancia Total'));
+
 
     precioFinal >= 1000 ? (
         envioGratis = true,
-        document.getElementById('precioTotal').innerHTML = 
-        `el precio final es de $ ${precioFinal} y el envio es gratis`,
-        localStorage.setItem('Ganancia', precioFinal - costoEnvio) ,
-        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal - costoEnvio)
+        Swal.fire({
+            icon : 'success',
+            html: `<p>Su compra se realizó con éxito</p>
+            <p>El precio final es de $ ${precioFinal} y el envío es GRATIS</p>
+            <button type="button" onclick="window.location.href='../index.html'" class="btn btn-secondary">OK</button>`,
+            showConfirmButton: false,
+        })
         
+ 
         ) : (
-        document.getElementById('precioTotal').innerHTML = 
-        `el precio final es de $ ${precioFinal}`,
-        localStorage.setItem('Ganancia', precioFinal),
-        localStorage.setItem('Ganancia Total', gananciaTotal + precioFinal)
-
+            Swal.fire({
+                icon : 'success',
+                html: `<p>Su compra se realizó con éxito</p>
+                    <p>el precio final es de $ ${precioFinal}</p>
+                    <button type="button" onclick="window.location.href='../index.html'" class="btn btn-secondary">OK</button>`,
+                showConfirmButton: false,
+            })
 
     )
 
     stockDisponible();
+    
+    for(i = carrito.length-1; i >= 0; i--) {
+        quitarItem(carrito[i].id);
+    }
 }
 
 
@@ -174,7 +144,68 @@ function actualizarPrecio() {
     
     let listaPrecios = arrayPrecios();
     let subtotal = suma(...listaPrecios);
-    
+    let total = calculoTotal();
 
-    document.getElementById("subtotal").innerHTML = `El subtotal es ${subtotal}`;
+    document.getElementById("subtotal").innerHTML = `$ ${subtotal}`;
+    document.getElementById("total").innerHTML = `$ ${total}`;
 }
+
+function mostrarCarrito() {
+    let DIV = document.getElementById('carritoTable');
+    DIV.innerHTML = '';
+    carrito.forEach(item => {
+        let plantaItem = arrayCatalogo.find(function(planta) {
+            return item.id == planta.id; } ) 
+        DIV.innerHTML += `
+
+            <tr>
+                <th scope="row">
+                    <button type="button" class="btn-close" onclick="quitarItem(${plantaItem.id})"></button>
+                    <label for="${plantaItem.id}">Cantidad: </label>
+                    <input id="${plantaItem.id}" type="number" value="1" min="1" max="${plantaItem.stock}" />
+                    <p id="disponibilidad${plantaItem.id}"></p>
+                </th>
+                <td style="width:200px;"><img src="${plantaItem.src}" class="card-img-top" style="width: 8rem; border: none"></td>
+                <td><p class="card-text plantaNombre" style="padding-right: 20px;">${plantaItem.nombre}</p></td>
+                <td><p class="card-text plantaNombre">$ ${plantaItem.precio}</p></td>
+            </tr>
+
+        `
+    })
+    DIV.innerHTML += `
+        <tfooter>
+            <tr>
+                
+                <td></td>
+                <td></td>
+                <th style="padding-left:500px;">Subtotal</th>
+                <td id=subtotal>$0</td>
+            </tr>
+            
+            <tr>
+                <td></td>
+                <td></td>
+                <th style="padding-left:500px;">Total</th>
+                <td id=total>$0</td>
+            </tr>
+        </tfooter>
+    `
+
+    carrito.forEach(item => {
+        document.getElementById(item.id).addEventListener("input", actualizarPrecio);
+    });
+    actualizarPrecio();
+}
+
+/* se crea evento al cargar el dom donde se hace la petición de los datos, y se agregan los 
+event listeners de cada input y una alerta al agregar producto al carrito de compras */
+
+document.addEventListener("DOMContentLoaded", async function(e){
+    arrayCatalogo = await getJSONdata();
+
+    document.getElementById("botonCarrito").addEventListener("click", displayPrecioFinal);
+      
+   
+    mostrarCarrito();
+    stockDisponible();
+})
