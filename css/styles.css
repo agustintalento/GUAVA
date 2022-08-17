@@ -37,3 +37,16 @@
 #plantas {
     margin-top: 50px;
 }
+
+.animate__animated.animate__flash {
+
+    --animate-duration: 3.25s;
+}
+
+#banner {
+    background-color: #CCDE59;
+}
+
+#destacados {
+    margin-top: 20px;
+}

@@ -1,10 +1,10 @@
-let envioGratis = false;
 let costoEnvio = 50;
 let arrayCatalogo = [];
 let carritoPath = './cart.html';
 
 /* creo funcion asincronica, donde se hace una petición de los datos en un archivo JSON, y a este
-array lo mostramos en la pagina catalogo, si la petición falla, se logea error en la consola */
+array lo mostramos en la pagina catalogo, en forma de cards,
+ si la petición falla, se logea error en la consola */
 
 const getJSONdata = async() => {
 
@@ -65,7 +65,7 @@ function mostrarCarrito() {
 
 
 
-/* se crea evento al cargar el dom donde se hace la petición de los datos */
+/* se crea evento al cargar el dom donde se hace la petición de los datos y se muestra el carrito */
 
 document.addEventListener("DOMContentLoaded", async function(e){
     arrayCatalogo = await getJSONdata();

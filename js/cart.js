@@ -1,4 +1,3 @@
-let envioGratis = false;
 let costoEnvio = 50;
 let arrayCatalogo = [];
 
@@ -100,8 +99,9 @@ function stockDisponible(){
 
 }
 
-/* despliego el precio final en el html y calcula si el envio es gratis o no,
-guardo la ganancia por compra, y ganancia total en el local storage */
+/* despliego el precio final en el html 
+además de mostrar con libreria que la compra fue exitosa y calcula y muestra si el envío es gratis o no
+cuando la compra finaliza, se quitan los elementos del carrito y nos redirecciona al index*/
 
 function displayPrecioFinal() {
 
@@ -109,7 +109,6 @@ function displayPrecioFinal() {
 
 
     precioFinal >= 1000 ? (
-        envioGratis = true,
         Swal.fire({
             icon : 'success',
             html: `<p>Su compra se realizó con éxito</p>
@@ -138,7 +137,7 @@ function displayPrecioFinal() {
 }
 
 
-/* funcion que actualiza el subtotal, variando el monto modificado en los inputs */
+/* funcion que actualiza el subtotal y el total, cuando se varía el monto modificado en los inputs */
 
 function actualizarPrecio() {
     
@@ -149,6 +148,9 @@ function actualizarPrecio() {
     document.getElementById("subtotal").innerHTML = `$ ${subtotal}`;
     document.getElementById("total").innerHTML = `$ ${total}`;
 }
+
+/* nos muestra los items del carrito que los guardamos en el local storage, en nuestra pagina cart
+y agrega un event listener en los inputs de cada planta */
 
 function mostrarCarrito() {
     let DIV = document.getElementById('carritoTable');
@@ -198,7 +200,7 @@ function mostrarCarrito() {
 }
 
 /* se crea evento al cargar el dom donde se hace la petición de los datos, y se agregan los 
-event listeners de cada input y una alerta al agregar producto al carrito de compras */
+event listener en el boton de compra final */
 
 document.addEventListener("DOMContentLoaded", async function(e){
     arrayCatalogo = await getJSONdata();

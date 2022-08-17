@@ -24,7 +24,7 @@ const getJSONdata = async() => {
 /* con el siguiente constructor, la idea es importar las plantas, para mostrarlas en el index 
 en forma de cards. El index va a tener una sección de plantas recomendadas, donde se clickea una planta
 y se abre un modal con info detallada de la misma. El usuario indica la cantidad que quiere 
-agregar al carrito de compras, donde finalmente se suman los totales y se hace la compra*/
+agregar al carrito de compras */
 
 function planta(id, nombre, tipo, altura, macetaIncluida, precio, stock, src) {
 
@@ -63,6 +63,8 @@ arrayPlantas.forEach(planta => {document.getElementById('plantas').innerHTML += 
     
 });
 
+/* la siguiente función muestra los articulos al offcanvas del carrito */
+
 function mostrarCarrito() {
     let DIV = document.getElementById('itemCarrito');
     DIV.innerHTML = '';
@@ -87,6 +89,8 @@ function mostrarCarrito() {
     })
 }
 
+/* se crea evento al cargar el dom donde se hace la petición de los datos, 
+y se inicializa la vista del carrito  */
 
 document.addEventListener("DOMContentLoaded", async function(e){
     arrayCatalogo = await getJSONdata();
